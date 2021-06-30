@@ -1,0 +1,39 @@
+version: '3.8'
+networks:
+        webapp:
+                driver: bridge
+                ipam:
+                        config:
+                                - subnet: 172.20.0.0/24
+                                  gateway: 172.20.0.1
+services: 
+       web-server1:
+                image: httpd:latest
+                container_name: server1
+                networks:
+                        webapp:
+                                ipv4_address: 172.20.0.2
+                volumes:
+                        - ./machine1/:/usr/local/apache2/htdocs
+       web-server2:
+                image: httpd:latest
+                container_name: server2
+                networks:
+                        webapp:
+                                ipv4_address: 172.20.0.3
+                volumes:
+                        - ./machine2/:/usr/local/apache2/htdocs
+       web-server3:
+                image: httpd:latest
+                container_name: server3
+                networks:
+                        webapp:
+                                ipv4_address: 172.20.0.4
+                volumes:
+                        - ./machine3/:/usr/local/apache2/htdocs
+       load-balancer:
+               build: ./nginx
+               container_name: load_balancer
+               networks:
+                        webapp:
+                                ipv4_address: 172.20.0.10
