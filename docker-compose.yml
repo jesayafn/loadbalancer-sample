@@ -31,9 +31,19 @@ services:
                                 ipv4_address: 172.20.0.4
                 volumes:
                         - ./machine3/:/usr/local/apache2/htdocs
-       load-balancer:
+       load-balancer-nginx:
                build: ./nginx
-               container_name: load_balancer
+               container_name: load_balancer_nginx
                networks:
                         webapp:
                                 ipv4_address: 172.20.0.10
+               ports:
+                     - 80:80
+       load-balancer-haproxy:
+               build: ./haproxy
+               container_name: load_balancer_haproxy
+               networks:
+                        webapp:
+                                ipv4_address: 172.20.0.20
+               ports:
+                     - 8080:80
